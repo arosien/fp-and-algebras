@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html class="black-theme">
+<head>
+  <title>The Structure of Programming Revolutions---Underscore.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="css/styles.css" />
+  <style>
+
+  </style>
+</head>
+<body>
+  <textarea id="source">
+    name: inverse
+    layout: true
+    class: underscore
+    ---
+    class: center, middle, hero
+
+    .title[
+      # Why do functional programmers always talk about algebra(s)?
+      ## Adam Rosien, [@arosien](http://twitter.com/arosien)
+
+      [![Underscore Logo](img/white-logo.png)](http://underscore.io/)
+    ]
+
+    ???
+
+    Hi, and welcome to my talk. My name is Adam Rosien and I'm a consultant at
+    Underscore, a Scala specialist consultancy.
+
+    Toggle speaker view by pressing P
+
+    Pressing C clones the slideshow view,
+    which is the view to put on the projector
+    if you're using speaker view.
+
+    Press ? to toggle keyboard commands help.
+
+    ---
+    class: center wide
+
+    # .spring[.remark-code[a + 2b + 12]]
+
+    ???
+
+    Algebras... what are they?
+
+    Here's a kind of algebraic expression familiar from school.
+
+    --
+
+    # .lemon[.remark-code[(p &amp; q) | r]]
+
+    ???
+
+    Here's another that we use all the time in programming: the boolean algebra.
+
+    --
+
+    # .maraschino[&#x2588; + &#x2588; = &#x2588;&#x2588;]
+
+    ???
+
+    What about... Lego(tm)? We put a block together with another block, and what do we get? Another Lego(tm).
+
+    --
+
+    # .sky[.smaller-code[.remark-code[path((0 to 3) map (i => &#x25dc; &#x21bb; (i*90)) = &#x25cb;]]]
+
+    ???
+
+    How about figure drawing? We can rotate an arc 4 times by 90&deg;, connect them as a path, and we can draw a circle.
+
+    --
+
+    # .smaller-code[.remark-code[case class Address(street: Street, state: State)]]
+
+    ???
+
+    How about types? We can certainly combine types together in certain ways to form other types.
+
+    --
+
+    .lavender[
+    .smaller-code[.remark-code[GET /repos/:owner/:repo/git/commits/:sha]]<br/>
+    .smaller-code[.remark-code[POST /repos/:owner/:repo/git/commits]]]
+
+    ???
+
+    How about an API? Can we consider an API an algebra? Or make it one?
+
+    We'll find out!
+
+    ---
+    class: center middle
+
+    # 1 Structure
+    # 2 Algebraic Data Types
+    # 3 Exploitation
+    # 4 Domain Algebras
+
+    ---
+    class: center middle section
+
+    # 1 Structure
+
+    ???
+
+    First, what are algebras, do they have some structure?
+
+    ---
+    class: center
+
+    # .spring[.remark-code[a + 2b + 12]]
+
+    ???
+
+    Here's our arithmetical expression again.
+
+    --
+
+    # a, b, ... &nbsp;&nbsp;&nbsp; 0, 1, 2, ...
+
+    ???
+
+    We see it consists of some variables, some constants.
+
+    --
+
+    # a &sdot; b &nbsp;&nbsp;&nbsp; a + b
+
+    ???
+
+    You can add or multiply them together.
+
+    --
+
+    a &sdot; b = b &sdot; a &nbsp;&nbsp;&nbsp; a &sdot; 1 = a &nbsp;&nbsp;&nbsp; a &sdot; 0 = 0 <br/><br/> a + b = b + a &nbsp;&nbsp;&nbsp; a + 0 = a <br/><br/> a &sdot; (b + c) = (a &sdot; b) + (a &sdot; c)
+
+    ???
+
+    You might remember these rules: the order of operations doesn't matter, there's a special number 0, that when added to anything, gives you back the input, etc.
+
+    ---
+    class: center
+
+    # .spring[<u>Algebra</u>]
+    # a, b, ... &nbsp;&nbsp;&nbsp; 0, 1, 2, ...
+    # a &sdot; b &nbsp;&nbsp;&nbsp; a + b
+    a &sdot; b = b &sdot; a &nbsp;&nbsp;&nbsp; a &sdot; 1 = a &nbsp;&nbsp;&nbsp; a &sdot; 0 = 0 <br/><br/> a + b = b + a &nbsp;&nbsp;&nbsp; a + 0 = a <br/><br/> a &sdot; (b + c) = (a &sdot; b) + (a &sdot; c)
+
+    ???
+
+    So this gives us enough information to describe algebraic structure. An algebra...
+
+    ---
+    class: center
+
+    # .spring[<u>Algebra</u>]
+    # Symbols
+    # a &sdot; b &nbsp;&nbsp;&nbsp; a + b
+    a &sdot; b = b &sdot; a &nbsp;&nbsp;&nbsp; a &sdot; 1 = a &nbsp;&nbsp;&nbsp; a &sdot; 0 = 0 <br/><br/> a + b = b + a &nbsp;&nbsp;&nbsp; a + 0 = a <br/><br/> a &sdot; (b + c) = (a &sdot; b) + (a &sdot; c)
+
+    ???
+
+    has symbols
+
+    ---
+    class: center
+
+    # .spring[<u>Algebra</u>]
+    # Symbols
+    # Operations
+    a &sdot; b = b &sdot; a &nbsp;&nbsp;&nbsp; a &sdot; 1 = a &nbsp;&nbsp;&nbsp; a &sdot; 0 = 0 <br/><br/> a + b = b + a &nbsp;&nbsp;&nbsp; a + 0 = a <br/><br/> a &sdot; (b + c) = (a &sdot; b) + (a &sdot; c)
+
+    ???
+
+    operations
+
+    ---
+    class: center
+
+    # .spring[<u>Algebra</u>]
+    # Symbols
+    # Operations
+    # Laws
+
+    ???
+
+    and laws.
+
+    ---
+    class: center
+
+    # .spring[<u>Algebra</u>]
+    # .tin[Symbols:] constants, variables
+    # .tin[Operations:] a &sdot; b &nbsp;&nbsp;&nbsp; a + b
+    # .tin[Laws: ] identity, symmetry, distributivity, ...
+
+    ???
+
+    Every algebra has 3 parts: its symbols, the operations on those symbols, and laws that constrain what those operations can do.
+
+    For example, in arithmetic, the symbols are our variables. We operate on those variables using addition and multiplication, and we have to maintain certain invariants like adding 0 to anything gives you back your input.
+
+    There can be higher order constraints, like the distributive law, where the product of a sum is equal to the sum of the products (with the multiplication factor *distributed* to the sums).
+
+    ---
+    class: center middle section
+
+    # 2 Algebraic Data Types
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # Symbols
+    # Operations
+    # Laws
+
+    ???
+
+    Algebraic data types... they must be some kind of algebra. We know what makes up an algebra now: symbols, operations, and laws.
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # .tin[Symbols: ] A, B, ...
+    # Operations
+    # Laws
+
+    ???
+
+    We know what the symbols of this algebra are, they are the names of our types.
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # .tin[Symbols: ] A, B, ...
+    # .tin[Operations: ] "make new types"
+    # .tin[Laws: ] compiler does it?
+
+    ???
+
+    But what about the operations? We know we want to "make new types". You may already have ideas about what operations we can perform.
+
+    And the laws? Maybe the compiler has them? Or, what are they?
+
+    ---
+    class: center
+
+    # a &sdot; b
+
+    ???
+
+    It turns out that the algebra of types is equivalent to the algebra of arithmetic. So we'll build our algebra of types starting with the same operations, and laws, as we did before.
+
+    Here we have a product: a times b.
+
+    --
+    ```
+    (A, B)
+    ```
+
+    ???
+
+    In types, that's just a tuple.
+
+    --
+    ```
+    (A, B) &#x2245; (B, A)
+
+    (A, (B, C)) &#x2245; ((A, B), C)
+    ```
+
+    ???
+
+    (symmetry law, associativity law)
+
+    Note that I'm not using = here, I'm using &#x2245; to mean "equivalent": both order of components in the tuples contain equivalent information. Same for nesting of tuples.
+
+    ---
+    class: center
+
+    # a &sdot; 1 = a
+
+    ???
+
+    What about multiplication by 1? We know this is true for arithmetic.
+
+    --
+
+    ```
+    (A, Unit) &#x2245; A
+    ```
+
+    ???
+
+    It's the same for products for types. 1 is the type Unit.
+
+    identity law (products)
+
+    ---
+    class: center
+
+    # a &sdot; 0 = 0
+
+    ???
+
+    What about multiplication by 0?
+
+    --
+
+    ```
+    (A, Nothing) &#x2245; Nothing
+    ```
+
+    ???
+
+    0 in types is Nothing, the type with *no* values. So anything paired with a value that can't exist, that can't exist either!
+
+    ---
+    class: center
+
+    # a + b
+
+    --
+
+    ```
+    Either[A, B]
+    ```
+
+    --
+
+    ```
+    Either[A, B] &#x2245; Either[B, A]
+
+    Either[A, Either[B, C]]
+    &#x2245;
+    Either[Either[A, B], C]
+    ```
+
+    ???
+
+    symmetry law
+
+    associativity law
+
+    ---
+    class: center
+
+    # a + 0 = a
+
+    --
+
+    ```
+    Either[A, Nothing] &#x2245; A
+    ```
+    ???
+
+    identity law (coproducts)
+
+    ---
+    class: center
+
+    # a &sdot; (b + c) = (a &sdot; b) + (a &sdot; c)
+
+    --
+    ```scala
+    (A, Either[B, C])
+    &#x2245;
+    Either[(A, B), (A, C)]
+    ```
+
+    ???
+
+    distributive law
+
+
+    ---
+    class: center
+
+    # 1 + 1 = 2
+
+    --
+
+    ```
+    Either[Unit, Unit] &#x2245; Boolean
+    ```
+
+    ---
+    class: center
+
+    # 1 + a
+
+    --
+
+    ```
+    Either[Unit, A] &#x2245; Option[A]
+    ```
+
+    ---
+    class: center
+
+    # a + a = 2 &sdot; a
+
+    --
+
+    ```
+    Either[A, A] &#x2245; (Boolean, A)
+    ```
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # Symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # .tin[Symbols:] Type symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # .tin[Symbols:] Type symbols
+    # .tin[Operations:] product, sum
+    # Laws
+
+    ???
+
+    TODO: product ~ case class
+    TODO: sum ~ sealed trait hierarchy
+
+    ---
+    class: center middle
+
+    # <u>Algebraic Data Types</u>
+    # .tin[Symbols:] Type symbols
+    # .tin[Operations:] product, sum
+    # .tin[Laws:] "it's just a semiring"
+
+    ---
+    class: center middle section
+
+    # 3 Exploitation
+
+    ???
+
+    "exploiting algebraic structure"
+
+    a.k.a "what's the point?"
+
+    ---
+    class: center middle
+
+    # Symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # .tin[Symbols]
+    # .tin[Operations]
+    # Laws
+
+    ???
+
+    Exploitation of our algebraic structure comes from the laws.
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |||||
+
+    ???
+
+    We're going to exploit the distributive law.
+
+    There's some math here. DON'T PANIC.
+
+    You got this.
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x212c;, &and;, true)<br/>(&#x212c;, &or;, false)|&nbsp;|&nbsp;|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x212c;, &and;, true)<br/>(&#x212c;, &or;, false)|!|&nbsp;|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x212c;, &and;, true)<br/>(&#x212c;, &or;, false)|!|!true = 0<sub>N</sub>alse<br/>!(a &and; b) = !a &or; !b|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x212c;, &and;, true)<br/>(&#x212c;, &or;, false)|!|!true = 0<sub>N</sub>alse<br/>!(a &and; b) = !a &or; !b|
+    |(&#x212c;, &or;, false)<br/>(&#x212c;, &and;, true)|!|!false = true<br/>!(a &or; b) = !a &and; !b|
+
+    ???
+
+    But the reverse case is also true! These are DeMorgan's laws.
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x211d;, +, 0)<br/>(&#x211d;, &sdot;, 1)|&nbsp;|&nbsp;|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x211d;, +, 0)<br/>(&#x211d;, &sdot;, 1)|e<sup>x</sup>|&nbsp;|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x211d;, +, 0)<br/>(&#x211d;, &sdot;, 1)|e<sup>x</sup>|e<sup>0</sup> = 1<br/>e<sup>a + b</sup> = e<sup>a</sup> &sdot; e<sup>b</sup>|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&#x211d;, +, 0)<br/>(&#x211d;, &sdot;, 1)|e<sup>x</sup>|e<sup>0</sup> = 1<br/>e<sup>a + b</sup> = e<sup>a</sup> &sdot; e<sup>b</sup><br/>e<sup>2a</sup> = e<sup>a</sup> &sdot; e<sup>a</sup>|
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(&leq;, &#x2218;<sub>&leq;</sub>, &epsilon;)<br/>(&rarr;, &#x2218;, id)|sort<sub>&leq;</sub>|sort<sub>&epsilon;</sub> = id<br/>sort<sub>a &#x2218;<sub>&leq;</sub> b</sub> = sort<sub>a</sub> &#x2218; sort<sub>b</sub>|
+
+    .tin[
+    &leq; = comparators (`A => Boolean`)
+
+    &#x2218;<sub>&leq;</sub> = composition of comparators
+
+    &epsilon; = always true comparator
+    ]
+
+    ---
+    class: center middle wide smaller-code remark-code
+
+    |(M, &oplus;, 0<sub>M</sub>)<br/>(N, &otimes;, 0<sub>N</sub>)|h|h(0<sub>M</sub>) = 0<sub>N</sub><br/>h(a &oplus; b) = h(a) &otimes; h(b)|
+    |---|---|---|
+    |(L, ++, Nil)<br/>(L<sub>s</sub>, &odot;, Nil)|sort|sort(Nil) = Nil<br/>sort(xs ++ ys) =<br/>sort(xs) &odot; sort(ys)|
+
+    .tin[
+    L = lists
+
+    L<sub>s</sub> = sorted lists
+
+    ++ = list concatenation
+
+    &odot; = "merge"
+    ]
+
+    ---
+    class: smaller-code
+
+    ```
+    trait Functor[F[_]] {
+      def map[A](fa: F[A])(f: A => B): F[B]
+    }
+    ```
+
+    --
+
+    ```
+    trait FunctorLaw[F[_]] {
+      def F: Functor[F]
+
+      def composeLaw[A, B, C](
+        fa: F[A],
+        f: A => B,
+        g: B => C) =
+          F.map(F.map(fa)(f), g) ==
+          F.map(fa)(f andThen g)
+    }
+    ```
+
+    ---
+    class: smaller-code
+
+    ```
+    trait RDD[A] {
+      def compute(): Iterator[A]
+
+      // Functor!
+      def map[B](f: A => B): RDD[B] =
+        ???
+    }
+    ```
+
+    ---
+    class: smaller-code
+
+    ```
+    trait RDD[A] {
+      def compute(): Iterator[A]
+
+      // Functor!
+      def map[B](f: A => B): RDD[B] =
+        MappedRdd(this, f)
+    }
+    ```
+
+    --
+
+    ```
+    case class MappedRDD[A, B](
+        parent: RDD[A],
+        f: A => B) extends RDD[B] {
+      def compute(): Iterator[B] =
+        parent.compute map f
+
+      override def map[C](g: B => C): RDD[C] =
+        copy(f = f andThen g)
+    }
+    ```
+
+    ---
+    class: center
+
+    # Other exploitations
+    --
+
+    map-reduce
+
+    --
+
+    database query optimization: predicate push-down, etc.
+
+    --
+
+    conflict-free replicated data types (CRDTs)
+
+    --
+
+    fold-fusion ("Banana-split law")
+
+    --
+
+    graph and dataflow algorithms via closed semirings
+
+    ---
+    class: center
+
+    # <u>(Exploiting) Algebra</u>
+    --
+
+    # Symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center
+
+    # .tin[<u>(Exploiting) Algebra</u>]
+    # .tin[Symbols]
+    # .tin[Operations]
+    # Laws
+
+    --
+
+    Transform code to the "better" side of an identity
+
+    Enable code transformation via reification (code &rarr; data)
+
+    ---
+    class: center middle section
+
+    # 4 Domain Algebras
+
+    ???
+
+    So we've talked about very *mathy* things so far: high-school algebra, laws like associativity and distributivity, etc. But we can apply these ideas, through the structure of an algebra, to our *domains*.
+
+    Domains are the "business" stuff of our applications, quite often fuzzy, ill-defined, or inconsistent in known (or unknown!) ways.
+
+    (Much of this section was derived from Debasish Ghosh's talks and book "Functional and Reactive Domain Modeling", which I highly recommend.)
+
+    ---
+    class: center middle
+
+    what's a domain
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # Symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols:] entities
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols:] entities
+    # .tin[Operations:] behaviors
+    # Laws
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols:] entities
+    # .tin[Operations:] behaviors
+    # .tin[Laws:] business rules
+
+    ---
+    class: center middle
+
+    .lavender[
+    .smaller-code[.remark-code[GET /repos/:owner/:repo/git/commits/:sha <br/> <br/>
+    POST /repos/:owner/:repo/git/commits]]]
+    <br/>
+
+    # .tin[Symbols: entities]
+    # .tin[Operations: behaviors]
+    # .tin[Laws: business rules]
+
+    ---
+    class: center middle
+
+    .lavender[
+    .smaller-code[.remark-code[GET /repos/.snow[:owner]/.snow[:repo]/git/commits/.snow[:sha] <br/> <br/>
+    POST /repos/.snow[:owner]/.snow[:repo]/git/.snow[commits]]]]
+    <br/>
+
+    # .tin[Symbols:] .snow[entities]
+    # .tin[Operations: behaviors]
+    # .tin[Laws: business rules]
+
+    ---
+    class: center middle
+
+    .lavender[
+    .smaller-code[.remark-code[.snow[GET] /repos/:owner/:repo/git/.snow[commits]/:sha <br/> <br/>
+    .snow[POST] /repos/:owner/:repo/git/.snow[commits]]]]
+    <br/>
+
+    # .tin[Symbols: entities]
+    # .tin[Operations:] .snow[behaviors]
+    # .tin[Laws: business rules]
+
+    ---
+    class: center middle
+
+    .lavender[
+    .smaller-code[.remark-code[GET /repos/:owner/:repo/git/commits/:sha <br/> <br/>
+    POST /repos/:owner/:repo/git/commits]]]
+    <br/>
+
+    # .tin[Symbols: entities]
+    # .tin[Operations: behaviors]
+    # .tin[Laws:] .snow[business rules ???]
+
+    ---
+    class: middle smaller-code
+
+    .center[.lavender[
+    .smaller-code[.remark-code[GET /repos/:owner/:repo/git/commits/:sha <br/> <br/>
+    POST /repos/:owner/:repo/git/commits]]]]
+    <br/>
+
+    ```
+    trait Github[Owner, Repo, Commit, SHA] {
+      def get: Owner => Repo => SHA
+               => Commit
+
+      def create: Owner => Repo => Commit
+                  => SHA
+    }
+    ```
+
+    ---
+    class: middle smaller-code
+
+    ```
+    trait Github[Owner, Repo, Commit, SHA] {
+      type Response[A] = Either[Fail, A]
+
+      sealed trait Fail
+      case class CommitExists(
+        owner: Owner,
+        repo: Repo,
+        sha: SHA) extends Fail
+
+      def get: Owner => Repo => SHA
+               => Option[Commit]
+
+      def create: Owner => Repo => Commit
+                  => Response[SHA]
+    }
+    ```
+
+    ---
+    class: middle smaller-code
+
+    ```
+    trait Github[Owner, Repo, Commit, SHA] {
+      type Response[A] = Either[Fail, A]
+
+      sealed trait Fail
+      case class CommitExists(
+        owner: Owner,
+        repo: Repo,
+        sha: SHA) extends Fail
+
+      def get(o: Owner, r: Repo, sha: SHA):
+        Option[Commit]
+
+      def create(o: Owner, r: Repo, c: Commit):
+        Response[SHA]
+    }
+    ```
+
+    ---
+    class: middle smaller-code wide
+
+    ```
+    trait GithubLaws[Owner, Repo, Commit, SHA] {
+      def api: Github[Owner, Repo, Commit, SHA]
+
+      def createLaw(o: Owner, r: Repo, c: Commit) =
+        api.create(o, r, c) match {
+          case Right(sha) =>
+            sha == c.sha &&
+            api.get(o, r, sha).isDefined
+
+          case Left(CommitExists(fo, fr, sha)) =>
+            fo == o &&
+            fr == r &&
+            api.get(o, r, sha).isDefined
+        }
+      }
+    }
+    ```
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # Symbols
+    # Operations
+    # Laws
+
+    ---
+    class: center middle
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols: ] abstract types
+    # Operations
+    # Laws
+
+    ---
+    class: center middle wide
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols: ] abstract types
+    # .tin[Operations: ] (effectful) functions
+    # Laws
+
+    ---
+    class: center middle wide
+
+    # .lavender[<u>Domain Algebra</u>]
+    # .tin[Symbols: ] abstract types
+    # .tin[Operations: ] (effectful) functions
+    # .tin[Laws: ] property-based tests
+
+    ---
+    class: center middle section
+
+    # &#x2140; Summary
+
+    ---
+    class: center
+
+    # <u>Algebraic structure</u>
+    ## Symbols, Operations, Laws
+    --
+
+    # <u>Don't repeat yourself / Be lazy</u>
+    ## so much structure is already well-understood and applicable
+    ## build new algebras from other algebras
+
+    ---
+    class: center wide
+
+    # <u>Exploitation</u>
+    ## use the identities from the laws
+    ## use (code &harr; data) transformations to apply identities
+
+    --
+
+    # <u>Domain algebras</u>
+    ## "messy" business stuff can be algebraic
+    ## abstract with verifiable laws
+
+    ---
+    class: center, middle, hero
+
+    .title[
+      # Thank You!
+
+      ## Adam Rosien, [@arosien](http://twitter.com/arosien)
+      ### http://underscore.io
+
+      [![Underscore Logo](img/white-logo.png)](http://underscore.io/)
+    ]
+
+    ---
+    # References
+
+    - [Origin of the word 'algebra'](http://www.und.edu/instruct/lgeller/algebra.html)
+    - [The Algebra of Algebraic Data Types](http://chris-taylor.github.io/blog/2013/02/10/the-algebra-of-algebraic-data-types/) by Chris Taylor
+    - [Functional Patterns: Monoid](http://philipnilsson.github.io/Badness10k/posts/2016-07-21-functional-patterns-monoid.html) by Philop Nilsson
+    - [An Algebraic Approach to Functional Domain Modeling](http://www.slideshare.net/debasishg/an-algebraic-approach-to-functional-domain-modeling) by Debasish Ghosh
+
+    # See also, i.e., explode your brain:
+
+    - F-algebras
+    - Object algebras
+    - "Finally tagless" encoding
+    - [Fun with Semirings](https://www.cl.cam.ac.uk/~sd601/papers/semirings.pdf)
+
+    ---
+    class: middle center section
+
+    # &oplus; Bonus slides
+
+    ---
+    class: center
+
+    # b<sup>a
+
+    --
+
+    ```
+    A => B
+    ```
+
+    ---
+    class: center
+
+    # 1<sup>a</sup> = 1
+
+    --
+
+    ```
+    A => Unit &#x2245; Unit
+    ```
+
+    ---
+    class: center
+
+    # a<sup>1</sup> = a
+
+    --
+
+    ```
+    Unit => A &#x2245; A
+    ```
+
+    ---
+    class: center
+
+    # (b &sdot; c)<sup>a</sup> = b<sup>a</sup> &sdot; c<sup>a</sup>
+
+    --
+
+    ```
+    A => (B, C) &#x2245; (A => B, A => C)
+    ```
+
+    ---
+    class: center
+
+    # c<sup>ab</sup> = (c<sup>a</sup>)<sup>b</sup>
+
+    --
+
+    ```scala
+    (A, B) => C
+    &#x2245;
+    A => B => C
+    ```
+
+    ---
+    class: center
+
+    # L(a) = 1 + a &sdot; L(a)
+
+    --
+
+    = 1 + a &sdot; (1 + a &sdot; L(a))
+
+    --
+
+    = 1 + a + a<sup>2</sup> &sdot; L(a)
+
+    --
+
+    = 1 + a + a<sup>2</sup> &sdot; (1 + a &sdot; L(a))
+
+    --
+
+    = 1 + a + a<sup>2</sup> + a<sup>3</sup> &sdot; L(a)
+
+    --
+
+    ...
+
+    = 1 + a + a<sup>2</sup> + a<sup>3</sup> + a<sup>4</sup> + ...
+
+    ---
+
+    class: wide smaller-code center
+
+    # L(a) = 1 + a &sdot; L(a)
+
+    --
+
+    ```
+    type L[A] = Either[Unit, (A, L[A])]
+    ```
+
+    --
+
+    ```
+    sealed trait List[+A]
+    case object Nil extends List[Nothing]
+    case class Cons[A](head: A, tail: List[A])
+    extends List[A]
+    ```
+  </textarea>
+  <!--
+    There's a copy of this JS included in the cached folder,
+    to give yourself a chance if you have no internets /o\
+  -->
+  <script src="cache/remark-latest.min.js">
+  </script>
+  <script>
+    var slideshow = remark.create({
+      ratio: '4:3',
+      //ratio: '16:9',
+
+
+      slideNumberFormat: '',
+      // Or you might like the page number bottom right:
+      // slideNumberFormat: '%current%',
+
+      // Default: use ```sql ..``` etc to override
+      highlightLanguage: 'scala',
+
+      // Plausible style for dark background:
+      highlightStyle: 'dark',
+
+      // These also look reasonable:
+      //highlightStyle: 'default',
+      //highlightStyle: 'ascetic',
+      //highlightStyle: 'vs',
+
+      //Good styles, but don't really work with a blue background:
+      //highlightStyle: 'ir_black',
+      //highlightStyle: 'dark',
+
+      });
+  </script>
+</body>
+</html>
